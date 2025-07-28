@@ -1,0 +1,60 @@
+{
+  "name": "@mexl/backstage-plugin-catalog-backend-module-mcp",
+  "version": "1.0.0",
+  "description": "Backstage catalog backend module for MCP (Model Context Protocol) entities",
+  "main": "dist/index.cjs.js",
+  "types": "dist/index.d.ts",
+  "license": "Apache-2.0",
+  "author": "mexl",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mexl/backstage-plugin-mcp.git"
+  },
+  "homepage": "https://github.com/mexl/backstage-plugin-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/mexl/backstage-plugin-mcp/issues"
+  },
+  "keywords": [
+    "backstage",
+    "plugin",
+    "mcp",
+    "model-context-protocol",
+    "catalog",
+    "ai",
+    "llm",
+    "entity"
+  ],
+  "backstage": {
+    "role": "backend-plugin-module"
+  },
+  "scripts": {
+    "build": "backstage-cli package build",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test",
+    "clean": "backstage-cli package clean",
+    "prepack": "yarn build"
+  },
+  "dependencies": {
+    "@backstage/backend-plugin-api": "^1.4.1",
+    "@backstage/catalog-model": "^1.7.5",
+    "@backstage/plugin-catalog-node": "^1.17.2",
+    "@backstage/types": "^1.1.1"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.33.1"
+  },
+  "peerDependencies": {
+    "@backstage/backend-plugin-api": "^1.4.1",
+    "@backstage/catalog-model": "^1.7.5",
+    "@backstage/plugin-catalog-node": "^1.17.2"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

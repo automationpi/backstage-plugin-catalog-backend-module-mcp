@@ -1,0 +1,10 @@
+src
+tsconfig.json
+.git
+.gitignore
+*.tsbuildinfo
+node_modules
+coverage
+.nyc_output
+.DS_Store
+*.log
