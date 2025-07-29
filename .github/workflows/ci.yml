@@ -41,7 +41,7 @@ jobs:
       run: yarn tsc || echo "Declaration generation completed with warnings"
     
     - name: Build package
-      run: backstage-cli package build
+      run: yarn build:backstage
     
     - name: Run tests
       run: yarn test
