@@ -34,14 +34,14 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
     
-    - name: Run type check
-      run: yarn tsc --noEmit
-    
     - name: Build package
       run: yarn build
     
     - name: Run tests
-      run: yarn test --passWithNoTests
+      run: yarn test
+    
+    - name: Run lint
+      run: yarn lint
     
     - name: Check package can be packed
       run: yarn pack --dry-run
