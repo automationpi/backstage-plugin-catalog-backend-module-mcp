@@ -23,7 +23,14 @@ Follow these steps to add MCP entity support to your Backstage application:
 
 ```bash
 # In your Backstage app root directory
-yarn add --cwd packages/backend @mexl/backstage-plugin-catalog-backend-module-mcp
+yarn --cwd packages/backend add @mexl/backstage-plugin-catalog-backend-module-mcp
+```
+
+Or alternatively:
+```bash
+cd packages/backend
+yarn add @mexl/backstage-plugin-catalog-backend-module-mcp
+cd ../..
 ```
 
 ### Step 2: Register the Backend Module
