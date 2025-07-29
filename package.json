@@ -33,7 +33,7 @@
   },
   "scripts": {
     "build": "yarn tsc && backstage-cli package build",
-    "tsc": "tsc --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.declarations.json",
     "lint": "backstage-cli package lint",
     "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
