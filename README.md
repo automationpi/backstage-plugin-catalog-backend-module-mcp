@@ -41,6 +41,8 @@ backend.add(import('@mexl/backstage-plugin-catalog-backend-module-mcp'));
 backend.start();
 ```
 
+> **Note**: This plugin requires Backstage version `1.0.0` or higher.
+
 ### Configuration
 
 Update your `app-config.yaml` to allow MCP entities:
@@ -265,6 +267,21 @@ kind:MCP runtime:node transport:stdio lifecycle:production
 - Ensure compatible Backstage versions
 - Check peer dependencies match your Backstage version
 - Rebuild after updates: `yarn build`
+
+### GitHub Actions Setup
+
+To set up automated NPM publishing:
+
+1. **Add NPM Token**: Go to Repository Settings → Secrets → Actions, add `NPM_TOKEN` with your NPM authentication token
+2. **Create Release**: Tag your code and create a GitHub release to trigger publication
+3. **Verify Build**: The CI workflow runs on every push to validate the package
+
+```bash
+# Create and push a release
+git tag v1.0.0
+git push origin v1.0.0
+# Then create a GitHub release from the tag
+```
 
 ## 📖 API Reference
 
