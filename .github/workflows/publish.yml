@@ -21,7 +21,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable
     
     - name: Run type check
       run: yarn tsc --noEmit
