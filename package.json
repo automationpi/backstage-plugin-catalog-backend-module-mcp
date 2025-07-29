@@ -32,8 +32,9 @@
     "node": ">=20.18.1"
   },
   "scripts": {
-    "build": "yarn tsc && backstage-cli package build",
+    "build": "backstage-cli package build",
     "tsc": "tsc --project tsconfig.declarations.json",
+    "tsc:check": "tsc --noEmit",
     "lint": "backstage-cli package lint",
     "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
