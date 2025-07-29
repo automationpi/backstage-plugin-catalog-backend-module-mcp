@@ -15,15 +15,18 @@ Add **MCP (Model Context Protocol) entity support** to your Backstage software c
 - **Search Integration**: Automatic inclusion in Backstage search
 - **Comprehensive Examples**: 5 real-world examples included
 
-## 🚀 Quick Start
+## 🚀 Step-by-Step Setup Guide
 
-### Installation
+Follow these steps to add MCP entity support to your Backstage application:
+
+### Step 1: Install the Plugin
 
 ```bash
-yarn add @mexl/backstage-plugin-catalog-backend-module-mcp
+# In your Backstage app root directory
+yarn add --cwd packages/backend @mexl/backstage-plugin-catalog-backend-module-mcp
 ```
 
-### Backend Integration
+### Step 2: Register the Backend Module
 
 Add the MCP module to your Backstage backend:
 
@@ -33,7 +36,11 @@ import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 
-// ... other plugins
+// ... your existing plugins
+backend.add(import('@backstage/plugin-app-backend'));
+backend.add(import('@backstage/plugin-proxy-backend'));
+backend.add(import('@backstage/plugin-scaffolder-backend'));
+backend.add(import('@backstage/plugin-techdocs-backend'));
 
 // Add MCP catalog module
 backend.add(import('@mexl/backstage-plugin-catalog-backend-module-mcp'));
@@ -43,21 +50,66 @@ backend.start();
 
 > **Note**: This plugin requires Backstage version `1.0.0` or higher.
 
-### Configuration
+### Step 3: Update Catalog Configuration
 
 Update your `app-config.yaml` to allow MCP entities:
 
 ```yaml
 catalog:
   rules:
-    - allow: [Component, System, API, Resource, Location, MCP]
+    - allow: [Component, System, API, Resource, Location, MCP]  # Add MCP here
   locations:
-    # Add your MCP entities
+    # Add your MCP entities file
     - type: file
-      target: ../../mcp-entities.yaml
+      target: ../../catalog-info/mcp-entities.yaml
       rules:
         - allow: [MCP]
 ```
+
+### Step 4: Create Your First MCP Entity
+
+Create a file `catalog-info/mcp-entities.yaml`:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: MCP
+metadata:
+  name: my-first-mcp
+  description: "My first MCP server for file operations"
+spec:
+  transport: stdio
+  runtime: node
+  type: file-processor
+  lifecycle: experimental
+  owner: my-team
+  capabilities:
+    tools: ["read_file", "write_file", "list_files"]
+  configuration:
+    command: "npx"
+    args: ["-y", "@my-org/file-mcp-server"]
+    timeout: 30000
+```
+
+### Step 5: Restart Backstage
+
+```bash
+# Restart your Backstage backend
+yarn dev
+```
+
+### Step 6: Verify Installation
+
+1. **Check Backend Logs**: Look for "Registering MCP entity processor" in your backend logs
+2. **Browse Catalog**: Go to your Backstage catalog and filter by `kind:MCP`
+3. **Search**: Try searching for "my-first-mcp" in the Backstage search bar
+
+## ✅ You're Done!
+
+Your Backstage catalog now supports MCP entities. You can:
+- **Browse** MCP servers in your catalog
+- **Search** for MCPs by runtime, transport, or capabilities  
+- **Track** ownership and dependencies
+- **Prevent** duplicate MCP implementations
 
 ## 📋 Entity Schema
 
