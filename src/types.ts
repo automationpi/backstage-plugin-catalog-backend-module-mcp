@@ -21,15 +21,45 @@ export type MCPServerType = 'data-connector' | 'tool-provider' | 'workflow-autom
 export type MCPAuthType = 'oauth2' | 'api-key' | 'none' | 'basic' | 'bearer';
 
 /**
+ * Tool definition with optional description
+ */
+export interface MCPTool {
+  /** Tool name/identifier */
+  name: string;
+  /** Human-readable description of what the tool does */
+  description?: string;
+}
+
+/**
+ * Resource definition with optional description
+ */
+export interface MCPResource {
+  /** Resource name/identifier */
+  name: string;
+  /** Human-readable description of the resource */
+  description?: string;
+}
+
+/**
+ * Prompt template definition with optional description
+ */
+export interface MCPPrompt {
+  /** Prompt name/identifier */
+  name: string;
+  /** Human-readable description of the prompt */
+  description?: string;
+}
+
+/**
  * Capabilities that an MCP server can provide
  */
 export interface MCPCapabilities {
   /** Functions/tools that the MCP server exposes */
-  tools?: string[];
+  tools?: (string | MCPTool)[];
   /** Resources/data that the MCP server can access */
-  resources?: string[];
+  resources?: (string | MCPResource)[];
   /** Pre-written prompt templates */
-  prompts?: string[];
+  prompts?: (string | MCPPrompt)[];
 }
 
 /**
