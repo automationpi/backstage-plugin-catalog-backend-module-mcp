@@ -105,18 +105,26 @@ yarn dev
 ```
 
 ### Step 6: Verify Installation
+Import your first MCP entity
 
-1. **Check Backend Logs**: Look for "Registering MCP entity processor" in your backend logs
-2. **Browse Catalog**: Go to your Backstage catalog and filter by `kind:MCP`
-3. **Search**: Try searching for "my-first-mcp" in the Backstage search bar
+Visit your Backstage instance and navigate to the Catalog. You should now see your MCP entity listed. You can verify by:
 
-## ✅ You're Done!
+1. Going to the "All" tab in the catalog
+2. Filtering by Kind = "MCP" 
+3. You should see "my-first-mcp" entity with its description
 
-Your Backstage catalog now supports MCP entities. You can:
-- **Browse** MCP servers in your catalog
-- **Search** for MCPs by runtime, transport, or capabilities  
-- **Track** ownership and dependencies
-- **Prevent** duplicate MCP implementations
+
+For MCP entity visualization, install the companion frontend plugin:
+
+```bash
+yarn --cwd packages/app add @mexl/backstage-plugin-mcp-frontend
+```
+
+
+![MCP Entity Page](docs/screenshots/mcp-overview-page.png)
+*Enhanced MCP entity page with interactive cards*
+
+See [@mexl/backstage-plugin-mcp-frontend](https://www.npmjs.com/package/@mexl/backstage-plugin-mcp-frontend) for setup instructions.
 
 ## 📋 Entity Schema
 
@@ -225,68 +233,6 @@ spec:
 
 See [examples/](./examples/) directory for comprehensive examples including all transport types and configurations.
 
-## 🔧 Development
-
-### Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/mexl/backstage-plugin-mcp.git
-cd backstage-plugin-mcp
-
-# Install dependencies
-yarn install
-
-# Build the plugin
-yarn build
-
-# Run tests
-yarn test
-
-# Lint code
-yarn lint
-```
-
-### Testing in Backstage
-
-1. Build the plugin: `yarn build`
-2. Link locally: `yarn link`
-3. In your Backstage app: `yarn link @mexl/backstage-plugin-catalog-backend-module-mcp`
-4. Add to backend as shown in Quick Start
-5. Restart Backstage
-
-## 🎯 Use Cases
-
-### Prevent MCP Duplication
-- **Problem**: Teams creating duplicate MCP servers
-- **Solution**: Central catalog shows existing MCPs before building new ones
-
-### MCP Discovery
-- **Search**: `kind:MCP runtime:python` finds all Python MCP servers
-- **Browse**: Filter catalog by MCP entities
-- **Dependencies**: See what components use specific MCPs
-
-### Integration Planning
-- **Architecture**: Understand MCP relationships in your system  
-- **Capacity**: See which MCPs are heavily used
-- **Migration**: Plan runtime or transport changes
-
-### Governance
-- **Lifecycle**: Track experimental → production → deprecated
-- **Ownership**: Clear responsibility for MCP maintenance
-- **Standards**: Ensure consistency across MCP implementations
-
-## 🔗 Entity Relationships
-
-The plugin automatically creates these relationships:
-
-- **ownedBy**: Links MCP to owner team/group
-- **partOf**: Links MCP to parent system  
-- **dependsOn**: Links to APIs, databases, etc.
-- **providesApi**: Auto-created API entities for MCPs with tools
-- **consumedBy**: Reverse dependency tracking
-
-## 🔍 Search Integration
 
 MCP entities are automatically searchable:
 
@@ -310,54 +256,6 @@ kind:MCP owner:platform-team
 kind:MCP runtime:node transport:stdio lifecycle:production
 ```
 
-## 🐛 Troubleshooting
-
-### Plugin Not Loading
-- Verify the module is imported in `packages/backend/src/index.ts`
-- Check backend logs for "Registering MCP entity processor"
-- Ensure plugin is built: `yarn build`
-
-### Entities Not Appearing
-- Verify `MCP` is in catalog rules: `allow: [MCP]`
-- Check entity validation errors in backend logs
-- Ensure required fields are present (transport, runtime, type, owner, lifecycle)
-
-### Type Errors
-- Ensure compatible Backstage versions
-- Check peer dependencies match your Backstage version
-- Rebuild after updates: `yarn build`
-
-### GitHub Actions Setup
-
-To set up automated NPM publishing:
-
-1. **Add NPM Token**: Go to Repository Settings → Secrets → Actions, add `NPM_TOKEN` with your NPM authentication token
-2. **Create Release**: Tag your code and create a GitHub release to trigger publication
-3. **Verify Build**: The CI workflow runs on every push to validate the package
-
-```bash
-# Create and push a release
-git tag v1.0.0
-git push origin v1.0.0
-# Then create a GitHub release from the tag
-```
-
-## 📖 API Reference
-
-### MCPEntityProcessor
-
-The main processor class that handles MCP entity validation and relationship creation.
-
-### Types
-
-- `MCPEntity`: Complete MCP entity interface
-- `MCPEntitySpec`: MCP specification interface  
-- `MCPTransport`: Transport method union type
-- `MCPRuntime`: Runtime environment union type
-- `MCPServerType`: Server type union type
-- `MCPCapabilities`: Capabilities interface
-- `MCPConfiguration`: Connection configuration interface
-- `MCPAuthentication`: Authentication configuration interface
 
 ## 🤝 Contributing
 
