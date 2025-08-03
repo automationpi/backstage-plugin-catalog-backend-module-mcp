@@ -174,7 +174,7 @@ export class MCPEntityProcessor implements CatalogProcessor {
     }
 
     // Validate type values
-    const validTypes = ['data-connector', 'tool-provider', 'workflow-automation', 'api-integration', 'file-processor'];
+    const validTypes = ['data-connector', 'tool-provider', 'workflow-automation', 'api-integration', 'file-processor', 'agent-services', 'domain-tools', 'analysis-framework'];
     if (!validTypes.includes(spec.type)) {
       throw new Error(`MCP entity ${entity.metadata.name} type must be one of: ${validTypes.join(', ')}`);
     }
