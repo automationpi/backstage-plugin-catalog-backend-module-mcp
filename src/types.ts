@@ -13,7 +13,7 @@ export type MCPRuntime = 'node' | 'python' | 'go' | 'csharp' | 'rust' | 'java';
 /**
  * MCP server types based on functionality
  */
-export type MCPServerType = 'data-connector' | 'tool-provider' | 'workflow-automation' | 'api-integration' | 'file-processor';
+export type MCPServerType = 'data-connector' | 'tool-provider' | 'workflow-automation' | 'api-integration' | 'file-processor' | 'agent-services' | 'domain-tools' | 'analysis-framework';
 
 /**
  * Authentication methods for MCP servers
@@ -21,33 +21,50 @@ export type MCPServerType = 'data-connector' | 'tool-provider' | 'workflow-autom
 export type MCPAuthType = 'oauth2' | 'api-key' | 'none' | 'basic' | 'bearer';
 
 /**
- * Tool definition with optional description
+ * Individual tool configuration
  */
 export interface MCPTool {
-  /** Tool name/identifier */
+  /** Tool name */
   name: string;
-  /** Human-readable description of what the tool does */
+  /** Tool description */
   description?: string;
+  /** Whether tool is enabled */
+  enabled?: boolean;
+  /** Tool-specific configuration */
+  config?: Record<string, any>;
+  /** Rate limits for this tool */
+  rateLimit?: {
+    requestsPerMinute?: number;
+    requestsPerHour?: number;
+  };
 }
 
 /**
- * Resource definition with optional description
+ * Individual resource configuration
  */
 export interface MCPResource {
-  /** Resource name/identifier */
+  /** Resource name */
   name: string;
-  /** Human-readable description of the resource */
+  /** Resource description */
   description?: string;
+  /** Resource access permissions */
+  permissions?: ('read' | 'write' | 'delete')[];
+  /** Resource-specific configuration */
+  config?: Record<string, any>;
 }
 
 /**
- * Prompt template definition with optional description
+ * Individual prompt configuration
  */
 export interface MCPPrompt {
-  /** Prompt name/identifier */
+  /** Prompt name */
   name: string;
-  /** Human-readable description of the prompt */
+  /** Prompt description */
   description?: string;
+  /** Prompt template */
+  template?: string;
+  /** Required parameters */
+  parameters?: string[];
 }
 
 /**
@@ -83,13 +100,52 @@ export interface MCPConfiguration {
 }
 
 /**
+ * API Key authentication configuration
+ */
+export interface MCPApiKeyAuth {
+  /** Where to place the API key */
+  keyLocation: 'header' | 'query' | 'env';
+  /** Name of the header/query parameter/env variable */
+  keyName: string;
+  /** Source of the key value */
+  keySource: 'secret' | 'env' | 'static';
+  /** Static key value (if keySource is 'static') */
+  keyValue?: string;
+}
+
+/**
+ * OAuth2 authentication configuration
+ */
+export interface MCPOAuth2Auth {
+  /** OAuth2 provider */
+  provider: string;
+  /** Client ID */
+  clientId: string;
+  /** OAuth2 scopes */
+  scopes?: string[];
+  /** Token endpoint URL */
+  tokenUrl?: string;
+}
+
+/**
  * Authentication configuration for MCP servers
  */
 export interface MCPAuthentication {
   /** Type of authentication */
   type: MCPAuthType;
-  /** OAuth2 provider (if applicable) */
-  provider?: string;
+  /** API key configuration (if type is 'api-key') */
+  apiKey?: MCPApiKeyAuth;
+  /** OAuth2 configuration (if type is 'oauth2') */
+  oauth2?: MCPOAuth2Auth;
+  /** Basic auth configuration (if type is 'basic') */
+  basic?: {
+    username: string;
+    passwordSource: 'secret' | 'env';
+  };
+  /** Bearer token configuration (if type is 'bearer') */
+  bearer?: {
+    tokenSource: 'secret' | 'env';
+  };
   /** Configuration specific to auth type */
   config?: Record<string, any>;
 }
@@ -119,11 +175,63 @@ export interface MCPEntitySpec extends Record<string, any> {
   /** Version of the MCP server */
   version?: string;
   
+  /** Rich metadata for better categorization */
+  metadata?: {
+    /** Tags for categorization and filtering */
+    tags?: string[];
+    /** Pricing information */
+    pricing?: {
+      model: 'free' | 'freemium' | 'paid' | 'enterprise';
+      details?: string;
+    };
+    /** Rate limits and quotas */
+    limits?: {
+      requestsPerMinute?: number;
+      requestsPerHour?: number;
+      requestsPerDay?: number;
+      maxConcurrentConnections?: number;
+    };
+    /** Support and documentation links */
+    support?: {
+      documentation?: string;
+      community?: string;
+      issues?: string;
+      examples?: string;
+    };
+    /** Maturity and reliability indicators */
+    maturity?: {
+      stability: 'alpha' | 'beta' | 'stable' | 'mature';
+      lastUpdated?: string;
+      maintenanceStatus: 'active' | 'maintenance' | 'deprecated';
+    };
+  };
+  
   /** Configuration for connecting to the server */
   configuration: MCPConfiguration;
   
   /** Authentication configuration */
   authentication?: MCPAuthentication;
+  
+  /** Integration guidance and setup help */
+  integration?: {
+    /** Quick start command or script */
+    quickStart?: string;
+    /** Setup instructions */
+    setupInstructions?: string[];
+    /** Configuration examples */
+    examples?: {
+      name: string;
+      description: string;
+      configuration: any;
+    }[];
+    /** Prerequisites and requirements */
+    prerequisites?: string[];
+    /** Common troubleshooting issues */
+    troubleshooting?: {
+      issue: string;
+      solution: string;
+    }[];
+  };
   
   /** Lifecycle stage */
   lifecycle: 'experimental' | 'production' | 'deprecated';
