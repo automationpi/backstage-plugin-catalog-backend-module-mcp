@@ -1,49 +1,45 @@
-# @mexl/backstage-plugin-catalog-backend-module-mcp
-
-Add **MCP (Model Context Protocol) entity support** to your Backstage software catalog.
-
 [![NPM Version](https://img.shields.io/npm/v/@mexl/backstage-plugin-catalog-backend-module-mcp)](https://www.npmjs.com/package/@mexl/backstage-plugin-catalog-backend-module-mcp)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## 🌟 Features
 
-- **Complete MCP Entity Kind**: Full support for MCP servers in your Backstage catalog
-- **Rich Validation**: Comprehensive validation for MCP entity configurations
-- **Relationship Modeling**: Automatic relationship generation (dependencies, ownership, API provision)
-- **Multi-Transport Support**: stdio, SSE, WebSocket, and HTTP transports
-- **Multiple Runtimes**: Node.js, Python, Go, C#, Rust, and Java
-- **Search Integration**: Automatic inclusion in Backstage search
-- **Comprehensive Examples**: 5 real-world examples included
+# @mexl/backstage-plugin-catalog-backend-module-mcp
 
-## 🚀 Step-by-Step Setup Guide
+_Add full Model Context Protocol (MCP) entity support to your Backstage software catalog. Enable discovery and reuse of MCP servers across your organization, centralizing AI tool management and reducing duplication. Teams can easily find, share, and integrate MCP capabilities._
 
-Follow these steps to add MCP entity support to your Backstage application:
+---
 
-### Step 1: Install the Plugin
+## Features
 
-```bash
-# In your Backstage app root directory
+- Comprehensive support for MCP (Model Context Protocol) entities as a native kind in Backstage
+- Configuration validation for MCP entities
+- Automatic modeling of relationships (dependencies, ownership, API provision)
+- Multi-transport: stdio, SSE, WebSocket, HTTP
+- Multiple runtimes supported: Node.js, Python, Go, C#, Rust, Java
+- Automatic search integration in Backstage
+- Real-world, production-ready example YAMLs included
+
+<img width="1591" height="675" alt="image" src="https://github.com/user-attachments/assets/ebe87bb9-109c-4249-a5e0-2987813081f8" />
+
+New entity type in backstage
+
+## Getting Started
+
+### 1. Install the Backend Plugin
+
+```sh
 yarn --cwd packages/backend add @mexl/backstage-plugin-catalog-backend-module-mcp
+
 ```
 
-Or alternatively:
-```bash
-cd packages/backend
-yarn add @mexl/backstage-plugin-catalog-backend-module-mcp
-cd ../..
-```
+### 2. Register the MCP Backend Module
 
-### Step 2: Register the Backend Module
+In your `packages/backend/src/index.ts`:
 
-Add the MCP module to your Backstage backend:
-
-```typescript
-// packages/backend/src/index.ts
+```ts
 import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 
-// ... your existing plugins
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend'));
@@ -55,27 +51,30 @@ backend.add(import('@mexl/backstage-plugin-catalog-backend-module-mcp'));
 backend.start();
 ```
 
-> **Note**: This plugin requires Backstage version `1.0.0` or higher.
+> **Note:** Requires Backstage version 1.0.0 or higher.
 
-### Step 3: Update Catalog Configuration
+### 3. Configure MCP Entity Support
 
-Update your `app-config.yaml` to allow MCP entities:
+In `app-config.yaml`, add MCP to your allowed kinds and catalog locations:
 
 ```yaml
 catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, MCP]  # Add MCP here
   locations:
-    # Add your MCP entities file
     - type: file
       target: ../../catalog-info/mcp-entities.yaml
       rules:
         - allow: [MCP]
 ```
 
-### Step 4: Create Your First MCP Entity
+> **Note:** This backend plugin provides the MCP entity support and catalog integration. To visualize MCP entities with rich UI components, you'll also need to install the [frontend plugin](https://github.com/automationpi/backstage-plugin-mcp-frontend).
 
-Create a file `catalog-info/mcp-entities.yaml`:
+## Test it
+
+### Define Your First MCP Entity
+
+Create `catalog-info/mcp-entities.yaml`:
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -97,38 +96,34 @@ spec:
     timeout: 30000
 ```
 
-### Step 5: Restart Backstage
+### Install Frontend Plugin for Visualization
 
-```bash
-# Restart your Backstage backend
-yarn dev
-```
+**Important:** While this backend plugin enables MCP entities in your catalog, you'll need the frontend plugin to visualize them with enhanced UI cards:
 
-### Step 6: Verify Installation
-Import your first MCP entity
-
-Visit your Backstage instance and navigate to the Catalog. You should now see your MCP entity listed. You can verify by:
-
-1. Going to the "All" tab in the catalog
-2. Filtering by Kind = "MCP" 
-3. You should see "my-first-mcp" entity with its description
-
-
-For MCP entity visualization, install the companion frontend plugin:
-
-```bash
+```sh
 yarn --cwd packages/app add @mexl/backstage-plugin-mcp-frontend
 ```
 
+See the [frontend plugin documentation](https://github.com/automationpi/backstage-plugin-mcp-frontend) for complete setup instructions.
 
-![MCP Entity Page](docs/screenshots/mcp-overview-page.png)
-*Enhanced MCP entity page with interactive cards*
+### Restart Backstage
 
-See [@mexl/backstage-plugin-mcp-frontend](https://www.npmjs.com/package/@mexl/backstage-plugin-mcp-frontend) for setup instructions.
+```sh
+yarn dev
+```
 
-## 📋 Entity Schema
+### Verify Installation
 
-MCP entities follow this schema:
+- Visit your Backstage instance, open Catalog
+- Filter by `Kind = MCP`
+- You should see your MCP entity listed
+- If you've installed the frontend plugin, clicking on an MCP entity will show rich UI cards with capabilities, configuration, and interactive features
+
+---
+
+## Example: MCP Entity Schema
+
+MCP entities use this schema:
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -137,55 +132,37 @@ metadata:
   name: my-mcp-server
   description: "Description of your MCP server"
 spec:
-  # Transport method
   transport: stdio | sse | websocket | http
-  
-  # Runtime environment  
   runtime: node | python | go | csharp | rust | java
-  
-  # Server type
   type: data-connector | tool-provider | workflow-automation | api-integration | file-processor
-  
-  # Lifecycle stage
   lifecycle: experimental | production | deprecated
-  
-  # Ownership
   owner: team-name
-  system: system-name  # optional
-  
-  # Capabilities
+  system: system-name
   capabilities:
-    tools: ["tool1", "tool2"]           # Functions provided
-    resources: ["resource1", "resource2"] # Data accessible  
-    prompts: ["prompt1", "prompt2"]     # Template prompts
-  
-  # Connection configuration
+    tools: ["tool1", "tool2"]
+    resources: ["resource1", "resource2"]
+    prompts: ["prompt1", "prompt2"]
   configuration:
-    command: "npx"                      # For stdio transport
+    command: "npx"
     args: ["-y", "@my/mcp-server"]
-    url: "https://my-server.com/mcp"    # For remote transports
+    url: "https://my-server.com/mcp"
     timeout: 30000
     env:
       - name: "API_KEY"
         valueFrom: "secret"
-  
-  # Authentication (optional)
   authentication:
     type: oauth2 | api-key | bearer | basic | none
     provider: "oauth-provider"
     config:
       scopes: ["read", "write"]
-  
-  # Relationships (optional)
   dependsOn: ["api:weather-api", "database"]
   consumedBy: ["component:my-app"]
 ```
 
-## 📚 Examples
-
-### Basic stdio MCP Server
+## Example: Example MCP Entity YAMLs
 
 ```yaml
+# Basic stdio MCP Server
 apiVersion: backstage.io/v1alpha1
 kind: MCP
 metadata:
@@ -205,9 +182,8 @@ spec:
     timeout: 30000
 ```
 
-### Remote HTTP MCP Server
-
 ```yaml
+# Remote HTTP MCP Server
 apiVersion: backstage.io/v1alpha1
 kind: MCP
 metadata:
@@ -231,54 +207,36 @@ spec:
   dependsOn: ["api:external-service"]
 ```
 
-See [examples/](./examples/) directory for comprehensive examples including all transport types and configurations.
+See the `examples/` directory for more sample configurations.
 
+---
 
-MCP entities are automatically searchable:
+## Complete Setup
 
-```bash
-# Find all MCP servers
-kind:MCP
+For a complete MCP implementation in Backstage, you'll need:
 
-# Find by runtime
-kind:MCP runtime:python
+1. **This backend plugin** - Provides MCP entity support and catalog integration
+2. **[Frontend plugin](https://github.com/automationpi/backstage-plugin-mcp-frontend)** - Adds rich UI cards and visualization for MCP entities
 
-# Find by transport  
-kind:MCP transport:stdio
+Both plugins work together to provide a comprehensive MCP experience in your Backstage instance.
 
-# Find by capabilities
-kind:MCP tools:weather
-
-# Find by team
-kind:MCP owner:platform-team
-
-# Combined searches
-kind:MCP runtime:node transport:stdio lifecycle:production
-```
-
-
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Please:
-
 1. Fork the repository
 2. Create a feature branch
 3. Add tests for new functionality
 4. Ensure all tests pass
 5. Submit a pull request
 
-## 📄 License
+## License
 
-Apache License 2.0 - see [LICENSE](LICENSE) file for details.
+Apache License 2.0 
 
-## 🔗 Links
+## Related Links
 
+- [Frontend Plugin (Required for UI)](https://github.com/automationpi/backstage-plugin-mcp-frontend)
 - [NPM Package](https://www.npmjs.com/package/@mexl/backstage-plugin-catalog-backend-module-mcp)
-- [GitHub Repository](https://github.com/mexl/backstage-plugin-mcp)
-- [Backstage.io](https://backstage.io/)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [Issues & Support](https://github.com/mexl/backstage-plugin-mcp/issues)
-
----
-
-**Made with ❤️ for the Backstage community**
+- [Backstage.io](https://backstage.io)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- Issues & Support: [GitHub Issues](https://github.com/automationpi/backstage-plugin-catalog-backend-module-mcp/issues)
