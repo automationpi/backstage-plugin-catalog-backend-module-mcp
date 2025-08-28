@@ -1,10 +1,19 @@
 [![NPM Version](https://img.shields.io/npm/v/@mexl/backstage-plugin-catalog-backend-module-mcp)](https://www.npmjs.com/package/@mexl/backstage-plugin-catalog-backend-module-mcp)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-
-# @mexl/backstage-plugin-catalog-backend-module-mcp
-
-_Add full Model Context Protocol (MCP) entity support to your Backstage software catalog. Enable discovery and reuse of MCP servers across your organization, centralizing AI tool management and reducing duplication. Teams can easily find, share, and integrate MCP capabilities._
+<div align="center">
+<table border="0" style="border: none;">
+<tr border="0" style="border: none;">
+<td align="center" width="50%" border="0" style="border: none;">
+<img width="350" height="350" alt="image" src="https://github.com/user-attachments/assets/848445d0-26fb-45a6-8815-70b4bbeada62" />
+</td>
+<td width="50%">
+<h3>MCP Backend Plugin</h3>
+Add full Model Context Protocol (MCP) entity support to your Backstage software catalog. Enable discovery and reuse of MCP servers across your organization, centralizing AI tool management and reducing duplication. Teams can easily find, share, and integrate MCP capabilities.
+</td>
+</tr>
+</table>
+</div>
 
 ---
 
